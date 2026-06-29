@@ -3,16 +3,16 @@
     msg_titulo:     .asciiz "Simulador de Fase de Grupos del Mundial\n"
     msg_ingreso:    .asciiz "Ingrese el nombre del pais: "
     
-    msg_tabla_antes:    .asciiz "\n=============================================\n  TABLA DE POSICIONES (DESORDENADA)\n============================================="
-    msg_tabla_despues:  .asciiz "\n=============================================\n  TABLA DE POSICIONES (ORDENADA)\n============================================="
+    msg_tabla_antes:    .asciiz "\n TABLA DE POSICIONES (DESORDENADA)"
+    msg_tabla_despues:  .asciiz "\n TABLA DE POSICIONES (ORDENADA)"
     
     # Cabecera de la tabla y espaciadores de formato
     msg_header:         .asciiz "\nPos  Pais                 PTS  GF  GC  DG\n---------------------------------------------\n"
-    sp_pos:             .asciiz "    "   # 4 espacios
-    sp_pts:             .asciiz " "      # 1 espacio
-    sp_gf:              .asciiz "    "   # 4 espacios
-    sp_gc:              .asciiz "   "    # 3 espacios
-    sp_dg:              .asciiz "   "    # 3 espacios
+    sp_pos:             .asciiz "    "
+    sp_pts:             .asciiz " "
+    sp_gf:              .asciiz "    "
+    sp_gc:              .asciiz "   "
+    sp_dg:              .asciiz "   "
     
     .align 2
     
@@ -65,7 +65,7 @@ FaseIngreso:
     la $t1, nombres         # Dirección base de nombres
 
 loop_ingreso:
-    beq $t0, 4, fin_ingreso # Si i == 4, salir
+    beq $t0, 4, fin_ingreso   # Si i == 4, salir
 
     li $v0, 4
     la $a0, msg_ingreso
@@ -241,7 +241,7 @@ FasePartidos:
     jr $ra
 
 Jugar_Partido:
-    # Calcular offsets para arreglos de enteros (Indice * 4)
+    # Offsets para arreglos de enteros
     sll $t8, $a2, 2     # A
     sll $t9, $a3, 2     # B
 
@@ -280,15 +280,17 @@ Jugar_Partido:
     #Actualizar Diferencia de Goles
     lw $t2, goles_favor($t8)
     lw $t3, goles_contra($t8)
+
     sub $t4, $t2, $t3
     sw $t4, dif_goles($t8)
 
+
     lw $t2, goles_favor($t9)
     lw $t3, goles_contra($t9)
+
     sub $t4, $t2, $t3
     sw $t4, dif_goles($t9)
 
-    # Lógica de Puntos FIFA
     # Si A > B -> A gana (3 pts)
     # Si B > A -> B gana (3 pts)
     # Si A == B -> Empate (1 pt cada uno)
@@ -325,9 +327,9 @@ FaseBubbleSort:
 
 loopI:
 
-    li $t1, 0               # j = 0
+    li $t1, 0
     li $t2, 3               # Límite n-1
-    sub $t2, $t2, $t0       # 3 - i
+    sub $t2, $t2, $t0
     blez $t2, end_sort      # Si límite <= 0, salir
 
 loopJ:
@@ -382,7 +384,7 @@ do_swap:
     # Intercambiar Strings
     # Offsets de string
     mul $s2, $t1, 20        # Dirección base string j
-    addi $s3, $s2, 20       # Dirección base string j+1
+    addi $s3, $s2, 20       # j+1
     
     li $t7, 0               # Contador para mover 5 palabras (5 * 4 = 20 bytes)
 
